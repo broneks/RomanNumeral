@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+	<title>Roman Numerals Translator</title>
+	<link href="../static/style.css" rel="stylesheet">
+</head>
+<body>
+	<div id="wrapper">
+		<form method="post">
+			<h2>Numerals to Number</h2>
+			<input type="text" name="user_input" id="input" 
+				   autofocus="autofocus" placeholder="roman numeral (e.g. XVI)" 
+				   value="{{user_input}}">
+			<input type="submit">
+			<input type="reset">
+		</form>
+		<div id="output">{{output}}</div>
+	</div>
+</body>
+</html>
