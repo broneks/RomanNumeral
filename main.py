@@ -84,18 +84,18 @@ class Main(Handler):
         self.render('index.html', user_input=user_input, output=output)
 
     def get(self):
-    	self.write_page()
+        self.write_page()
 
     def post(self):
-    	user_input = esc_html(self.request.get('user_input'))
+        user_input = esc_html(self.request.get('user_input'))
         number = ''
 
         # user input must be a string that contains Roman Numeral letters
-    	if user_input.isdigit() or not (str_match_roman(user_input)):
+        if user_input.isdigit() or not (str_match_roman(user_input)):
             error = "<span style='color:red;'>Input must be in Roman Numerals.</span>"
             self.write_page(user_input=user_input, output=error)
 
-    	else:
+        else:
             number = numeral_to_num(user_input)
             self.write_page(user_input=user_input, output=number)
 
