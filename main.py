@@ -69,10 +69,10 @@ def numeral_to_num(numerals):
     return sub_principle(numbers)
 	
 def valid_roman(numerals):
-	"""
-	Checks string for valid Roman Numerals syntax.
-	"""
-	pass
+    """
+    Checks string for valid Roman Numerals syntax.
+    """
+    pass
 	
 
 class Main(Handler):
