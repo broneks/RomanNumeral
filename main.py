@@ -18,15 +18,15 @@ def esc_html(s):
 class Handler(webapp2.RequestHandler):
     # Handler that renders jinja2 templates
 
-	def write(self, *a, **kw):
-		self.response.write(*a, **kw)
+    def write(self, *a, **kw):
+        self.response.write(*a, **kw)
 
-	def render_str(self, template, **params):
-		t = jinja_env.get_template(template)
-		return t.render(params)
+    def render_str(self, template, **params):
+        t = jinja_env.get_template(template)
+        return t.render(params)
 
-	def render(self, template, **kw):
-		self.write(self.render_str(template, **kw))
+    def render(self, template, **kw):
+        self.write(self.render_str(template, **kw))
 
 
 def str_match_roman(s):
@@ -80,23 +80,23 @@ class Main(Handler):
     Main handler that renders the html page, manages input from the form 
     and renders the appropriate output.
     """
-    def write_page(self, user_input="", output=""):
-        self.render('index.html', user_input=user_input, output=output)
+    def write_page(self, output=""):
+        self.render('index.html', output=output)
 
     def get(self):
     	self.write_page()
 
     def post(self):
     	user_input = esc_html(self.request.get('user_input'))
-        number = ''
+        output = ''
 
         # user input must be a string that contains Roman Numeral letters
     	if user_input.isdigit() or not (str_match_roman(user_input)):
             error = "<span style='color:red;'>Input must be in Roman Numerals.</span>"
-            self.write_page(user_input=user_input, output=error)
+            self.write_page(output=error)
 
     	else:
-            number = numeral_to_num(user_input)
-            self.write_page(user_input=user_input, output=number)
+            output = "%s --> %s" % (user_input, numeral_to_num(user_input))
+            self.write_page(output=output)
 
 app = webapp2.WSGIApplication([('/', Main)], debug=True)
