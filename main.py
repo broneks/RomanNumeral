@@ -5,8 +5,7 @@ import cgi
 import re
 
 template_dir = os.path.join(os.path.dirname(__file__), 'templates')
-jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir),
-							   autoescape = False)
+jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir), autoescape = False)
 
 def esc_html(s):
     """
@@ -87,27 +86,15 @@ class Main(Handler):
         self.write_page()
 
     def post(self):
-<<<<<<< HEAD
     	user_input = esc_html(self.request.get('user_input'))
         output = ''
-=======
-        user_input = esc_html(self.request.get('user_input'))
-        number = ''
->>>>>>> f28a1cbb0813c647deb9d96c4a55bee79201350c
 
-        # user input must be a string that contains Roman Numeral letters
+	# user input must be a string that contains Roman Numeral letters
         if user_input.isdigit() or not (str_match_roman(user_input)):
             error = "<span style='color:red;'>Input must be in Roman Numerals.</span>"
             self.write_page(output=error)
-
-<<<<<<< HEAD
     	else:
             output = "%s --> %s" % (user_input, numeral_to_num(user_input))
             self.write_page(output=output)
-=======
-        else:
-            number = numeral_to_num(user_input)
-            self.write_page(user_input=user_input, output=number)
->>>>>>> f28a1cbb0813c647deb9d96c4a55bee79201350c
 
 app = webapp2.WSGIApplication([('/', Main)], debug=True)
