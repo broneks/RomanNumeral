@@ -6,4 +6,4 @@ RomanNum
 
 ========
 
-- the app is available here: http://www.roman-num.appspot.com
+- try out the app here: http://www.roman-num.appspot.com
