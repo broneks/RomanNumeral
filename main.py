@@ -3,6 +3,7 @@ import webapp2
 import jinja2
 import cgi
 import re
+from collections import Counter
 
 template_dir = os.path.join(os.path.dirname(__file__), 'templates')
 jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir), autoescape = False)
@@ -54,7 +55,7 @@ def sub_principle(numbers):
 
 def numeral_to_num(numerals):
     """
-    Converts Roman Numerals to a number.
+    Converts Roman Numerals to a list of numbers.
     """
     converters = {'I': 1, 'i': 1, 'V': 5, 'v': 5, 
                  'X': 10, 'x': 10, 'L': 50, 'l': 50, 
@@ -65,14 +66,37 @@ def numeral_to_num(numerals):
         for key in converters:
             if numeral == key:
                 numbers.append(converters[key])
-    return sub_principle(numbers)
+    return numbers
 	
+def power_of_ten(num):
+    return num == 1 or num % 10 == 0
+
 def valid_roman(numerals):
     """
     Checks string for valid Roman Numerals syntax.
     """
-    pass
-	
+    numbers = numeral_to_num(numerals)
+    for index in xrange(len(numbers) - 1):
+        nextNum = numbers[index + 1]
+        if numbers[index] == nextNum:
+            return True
+        elif numbers[index] * 10 >= nextNum:
+            if power_of_ten(numbers[index]):
+                return True
+
+def repetition_rule(numerals):
+    """
+    Checks for a Numeral that repeats consecutively four times or more.
+    """
+    freq = []
+    for index in xrange(len(numerals) - 1):
+        if numerals[index] == numerals[index + 1]:
+            if freq:
+                freq.append(numerals[index])
+            else:
+                freq.append(numerals[index])
+                freq.append(numerals[index + 1])
+    return len(freq) >= 4
 
 class Main(Handler):
     """
@@ -89,12 +113,31 @@ class Main(Handler):
         user_input = esc_html(self.request.get('user_input'))
         output = ''
 
-	# user input must be a string that contains Roman Numeral letters
+	    # user input must be a string that contains Roman Numeral letters
         if user_input.isdigit() or not (str_match_roman(user_input)):
-            error = "<span style='color:red;'>Input must be in Roman Numerals.</span>"
-            self.write_page(output=error)
+            output = "<span style='color:red;'>Input must be in Roman Numerals.</span>"
+
+        # user input must follow proper syntax
+        elif not valid_roman(user_input):
+            output = """<span style='color:red;'>Your syntax is off. Follow these rules:</span><br>
+                       <span style='color:red;'>Only I can go before V or X,</span><br>
+                       <span style='color:red;'>X before L or C,</span><br>
+                       <span style='color:red;'>C before D or M.</span>"""
+            output += "<br><br>" + user_input
+
+        # numbers equal to 3999 and up require a special character and can't be handled
+        elif sub_principle(numeral_to_num(user_input)) >= 4000:
+            output = """<span style='color:red;'>Sorry. Can't handle numbers 4000 or greater.</span><br>
+                        <a href='http://able2know.org/topic/54469-1'>Here's why</span>"""
+
+        # user input cannot have a Roman Numeral that repeats four times or more in a row
+        elif repetition_rule(user_input):
+            output = "<span style='color:red;'>Is your key stuck?</span>"
+
         else:
-            output = "%s --> %s" % (user_input, numeral_to_num(user_input))
-            self.write_page(output=output)
+            numList = numeral_to_num(user_input)
+            output = "{0} --> {1}" .format(user_input, sub_principle(numList))
+        
+        self.write_page(output=output)
 
 app = webapp2.WSGIApplication([('/', Main)], debug=True)
