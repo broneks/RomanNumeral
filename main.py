@@ -57,10 +57,8 @@ def numeral_to_num(numerals):
     """
     Converts Roman Numerals to a list of numbers.
     """
-    converters = {'I': 1, 'i': 1, 'V': 5, 'v': 5, 
-                 'X': 10, 'x': 10, 'L': 50, 'l': 50, 
-                 'C': 100, 'c': 100, 'D': 500, 'd': 500,
-                 'M': 1000, 'm': 1000}
+    converters = {'I': 1, 'V': 5, 'X': 10, 'L': 50, 
+                 'C': 100, 'D': 500, 'M': 1000}
     numbers = []
     for numeral in numerals:
         for key in converters:
@@ -110,8 +108,8 @@ class Main(Handler):
         self.write_page()
 
     def post(self):
-        user_input = esc_html(self.request.get('user_input'))
-        output = ''
+		# input is escaped and converted into uppercase
+        user_input = esc_html(self.request.get('user_input')).upper()
 
 	    # user input must be a string that contains Roman Numeral letters
         if user_input.isdigit() or not (str_match_roman(user_input)):
