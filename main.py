@@ -79,8 +79,7 @@ def valid_roman(numerals):
         if numbers[index] == nextNum:
             return True
         elif numbers[index] * 10 >= nextNum:
-            if power_of_ten(numbers[index]):
-                return True
+            return power_of_ten(numbers[index])
 
 def repetition_rule(numerals):
     """
